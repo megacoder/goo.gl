@@ -3,6 +3,18 @@
 
 import	sys
 import	os
+import	readline
+
+sys.path.append(
+	os.path.dirname(
+		os.path.abspath(
+			os.path.expanduser(
+				os.environ[ 'HOME' ]
+			)
+		)
+	)
+)
+
 from	googl	import	*
 
 def	shorten( url ):
@@ -14,17 +26,22 @@ def	lengthen( short ):
 	return longer['longUrl']
 
 def	process( url ):
-	short = shorten( url )
-	print short
-	longer = lengthen( short )
-	print longer
+	if url.startswith( 'http://goo.gl/' ):
+		longer = lengthen( url )
+		print longer
+	else:
+		short = shorten( url )
+		print short
 	return
 
 if __name__ == '__main__':
 	googl = Googl()
-	if len(sys.argv) == 0:
+	if len(sys.argv) == 1:
 		while True:
-			reply = raw_input( 'url> ' )
+			try:
+				reply = raw_input( 'url> ' )
+			except EOFError:
+				break
 			process( reply.strip() )
 	else:
 		for optarg in sys.argv[1:]:
